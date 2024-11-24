@@ -2,8 +2,6 @@ package com.projetoLocadora.locadora.controller;
 import java.util.UUID;
 
 import javax.management.relation.RelationNotFoundException;
-import javax.management.relation.RelationTypeNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

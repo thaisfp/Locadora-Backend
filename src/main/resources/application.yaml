@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: locadora
+  datasource:
+    url: jdbc:postgresql://localhost:5432/locadora
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        id:
+          new_generator_mappings: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual:
+              creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+  web:
+    resources:
+      static-locations: none
+
+server:
+  port: 5020
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE

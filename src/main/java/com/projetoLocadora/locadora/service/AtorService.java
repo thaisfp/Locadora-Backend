@@ -1,6 +1,5 @@
 package com.projetoLocadora.locadora.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.management.relation.RelationNotFoundException;
