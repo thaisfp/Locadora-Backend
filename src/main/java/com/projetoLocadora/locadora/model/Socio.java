@@ -11,7 +11,6 @@ import lombok.Data;
 @Entity
 public class Socio extends Cliente{
     
-    
     private String cpf;
 
     private String endereco;
