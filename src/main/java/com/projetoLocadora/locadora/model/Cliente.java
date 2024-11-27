@@ -1,5 +1,8 @@
 package com.projetoLocadora.locadora.model;
 import java.util.Date;
+import java.util.UUID;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +17,10 @@ import lombok.Data;
 public class Cliente {
     
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue( strategy = GenerationType.UUID)
+    private UUID idCliente;
+    
+    @Column(unique = true)
     private Long numInscricao;
 
     private String nome;
