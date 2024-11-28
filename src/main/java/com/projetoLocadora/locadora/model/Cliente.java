@@ -17,9 +17,7 @@ import lombok.Data;
 public class Cliente {
     
     @Id
-    @GeneratedValue( strategy = GenerationType.UUID)
-    private UUID idCliente;
-    
+    @GeneratedValue( strategy = GenerationType.IDENTITY)    
     @Column(unique = true)
     private Long numInscricao;
 

@@ -37,8 +37,8 @@ public class SocioController {
             @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do cliente."),
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
-    public Socio salvarSocio(@RequestBody Socio grava) {
-        return socioService.saveSocio(grava);
+    public Socio salvarSocio(@RequestBody Socio novoSocio) {
+        return socioService.saveSocio(novoSocio);
 
     }
 

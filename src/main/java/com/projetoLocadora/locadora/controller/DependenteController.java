@@ -37,8 +37,8 @@ public class DependenteController {
             @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do Dependente."),
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
-    public Dependente salvarDependente(@RequestBody Dependente grava) {
-        return dependenteService.saveDependente(grava);
+    public Dependente salvarDependente(@RequestBody Dependente novoDependente) {
+        return dependenteService.saveDependente(novoDependente);
 
     }
 
