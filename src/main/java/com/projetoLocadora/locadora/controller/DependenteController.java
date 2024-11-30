@@ -2,6 +2,7 @@ package com.projetoLocadora.locadora.controller;
 
 import java.util.List;
 
+import javax.management.relation.RelationNotFoundException;
 import javax.management.relation.RelationTypeNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,45 +76,49 @@ public class DependenteController {
 
     }
 
-    @GetMapping("/listar")
-    @Operation(description = "Retorna todos os dependentees cadastrados.", responses = {
-            @ApiResponse(responseCode = "200", description = "Caso o dependente seja listado com sucesso."),
-            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do Dependente."),
+     @GetMapping("/listar")
+    @Operation(description = "Lista todos os itens.", responses = {
+            @ApiResponse(responseCode = "200", description = "Caso os itens sejam listadas com sucesso."),
+            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do cliente."),
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
-    public List<Dependente> listarDependente() {
-        return dependenteService.listAllDependentes();
+    public ResponseEntity<?> listarDependeste() throws RelationNotFoundException {
+        try {
+            return ResponseEntity.ok(dependenteService.listAll());
+        } catch (Exception erro) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: " + erro.getMessage());
+        }
     }
 
-    @GetMapping("/listar/ativo")
-    @Operation(description = "Retorna todos os dependentees cadastrados.", responses = {
-            @ApiResponse(responseCode = "200", description = "Caso o dependente seja listado com sucesso."),
-            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do Dependente."),
-            @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
-    })
-    public List<Dependente> listarDependenteAtivo() {
-        return dependenteService.listAllDependentesQuery2();
-    }
+    // @GetMapping("/listar/ativo")
+    // @Operation(description = "Retorna todos os dependentees cadastrados.", responses = {
+    //         @ApiResponse(responseCode = "200", description = "Caso o dependente seja listado com sucesso."),
+    //         @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do Dependente."),
+    //         @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
+    // })
+    // public List<Dependente> listarDependenteAtivo() {
+    //     return dependenteService.listAllDependentesQuery2();
+    // }
 
-    @GetMapping("/listar/inativo")
-    @Operation(description = "Retorna todos os dependentees cadastrados.", responses = {
-            @ApiResponse(responseCode = "200", description = "Caso o dependente seja listado com sucesso."),
-            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do Dependente."),
-            @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
-    })
-    public List<Dependente> listarDependenteInativo() {
-        return dependenteService.listAllDependentesQuery3();
-    }
+    // @GetMapping("/listar/inativo")
+    // @Operation(description = "Retorna todos os dependentees cadastrados.", responses = {
+    //         @ApiResponse(responseCode = "200", description = "Caso o dependente seja listado com sucesso."),
+    //         @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do Dependente."),
+    //         @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
+    // })
+    // public List<Dependente> listarDependenteInativo() {
+    //     return dependenteService.listAllDependentesQuery3();
+    // }
 
-    @GetMapping("/listar/ativosmulta")
-    @Operation(description = "Retorna todos os dependentees cadastrados que nao tenham multa e estão ativos.", responses = {
-            @ApiResponse(responseCode = "200", description = "Caso o dependente seja listado com sucesso."),
-            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do Dependente."),
-            @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
-    })
-    public List<Dependente> listarDependenteESemMulta() {
-        return dependenteService.listAllDependentesQuery4();
-    }
+    // @GetMapping("/listar/ativosmulta")
+    // @Operation(description = "Retorna todos os dependentees cadastrados que nao tenham multa e estão ativos.", responses = {
+    //         @ApiResponse(responseCode = "200", description = "Caso o dependente seja listado com sucesso."),
+    //         @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do Dependente."),
+    //         @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
+    // })
+    // public List<Dependente> listarDependenteESemMulta() {
+    //     return dependenteService.listAllDependentesQuery4();
+    // }
 
     @GetMapping("/listar/{id}")
     @Operation(description = "Retorna o dependente cadastrado por id.", responses = {

@@ -49,7 +49,7 @@ public class ItemController {
             @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do cliente."),
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
-    public ResponseEntity<?> obterIdItem() throws RelationNotFoundException {
+    public ResponseEntity<?> listarItem() throws RelationNotFoundException {
         try {
             return ResponseEntity.ok(service.listAll());
         } catch (Exception erro) {

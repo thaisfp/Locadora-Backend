@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.projetoLocadora.locadora.model.Dependente;
+import com.projetoLocadora.locadora.model.Item;
 import com.projetoLocadora.locadora.repository.DependenteRepository;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,25 +57,28 @@ public class DependenteService {
         return dependenteRepository.save(dependente);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<Dependente> listAllDependentes() {
-        return dependenteRepository.findByDependentesOption();
+    public Iterable<Dependente> listAll() {
+        return dependenteRepository.findAll();
     }
+    // @Transactional(propagation = Propagation.REQUIRES_NEW)
+    // public List<Dependente> listAllDependentes() {
+    // return dependenteRepository.findByDependentesOption();
+    // }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<Dependente> listAllDependentesQuery2() {
-        return dependenteRepository.findAllByDependentesAtivos();
-    }
+    // @Transactional(propagation = Propagation.REQUIRES_NEW)
+    // public List<Dependente> listAllDependentesQuery2() {
+    // return dependenteRepository.findAllByDependentesAtivos();
+    // }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<Dependente> listAllDependentesQuery3() {
-        return dependenteRepository.findAllByDependentesInativos();
-    }
+    // @Transactional(propagation = Propagation.REQUIRES_NEW)
+    // public List<Dependente> listAllDependentesQuery3() {
+    // return dependenteRepository.findAllByDependentesInativos();
+    // }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<Dependente> listAllDependentesQuery4() {
-        return dependenteRepository.findAllByDependentesativosesemmulta();
-    }
+    // @Transactional(propagation = Propagation.REQUIRES_NEW)
+    // public List<Dependente> listAllDependentesQuery4() {
+    // return dependenteRepository.findAllByDependentesativosesemmulta();
+    // }
 
     public Dependente listIdDependente(Long id) throws RelationTypeNotFoundException {
         return dependenteRepository.findById(id)
