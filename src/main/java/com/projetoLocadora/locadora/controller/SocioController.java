@@ -2,6 +2,7 @@ package com.projetoLocadora.locadora.controller;
 
 import java.util.List;
 
+import javax.management.relation.RelationNotFoundException;
 import javax.management.relation.RelationTypeNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,20 @@ public class SocioController {
     })
     public Socio editarSocioAtivo(@RequestBody Socio grava) throws RelationTypeNotFoundException {
         return socioService.desactiveSocio(grava);
+    }
+
+     @GetMapping("/listar")
+    @Operation(description = "Lista todos os socios.", responses = {
+            @ApiResponse(responseCode = "200", description = "Caso os socios sejam listadas com sucesso."),
+            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do cliente."),
+            @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
+    })
+    public ResponseEntity<?> listarSocios() throws RelationNotFoundException {
+        try {
+            return ResponseEntity.ok(socioService.listAll());
+        } catch (Exception erro) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: " + erro.getMessage());
+        }
     }
 
     @GetMapping("/listar/ativo")

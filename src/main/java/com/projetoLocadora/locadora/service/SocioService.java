@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.projetoLocadora.locadora.model.Dependente;
+import com.projetoLocadora.locadora.model.Item;
 import com.projetoLocadora.locadora.model.Socio;
+import com.projetoLocadora.locadora.repository.DependenteRepository;
 import com.projetoLocadora.locadora.repository.SocioRepository;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +24,9 @@ public class SocioService {
 
     @Autowired
     private SocioRepository socioRepository;
+
+    @Autowired
+    private DependenteRepository dependenteRepository;
 
     public Socio saveSocio(Socio socioEntra) {
         if (socioEntra.getDependentes().size() > 0) {
@@ -41,10 +46,14 @@ public class SocioService {
         }
     }
 
+    public Iterable<Socio> listAll() {
+        return socioRepository.findAll();
+    }
+
     public Socio activeSocio(Socio socioEntra) throws RelationTypeNotFoundException {
-        Socio socio = socioRepository.findById(socioEntra.getNumInscricao())
+        Socio socio = socioRepository.findByNome(socioEntra.getNome())
                 .orElseThrow(() -> new RelationTypeNotFoundException(
-                        "Sócio não existe com número de inscrição:" + socioEntra.getNumInscricao()));
+                        "Sócio não existe com número de inscrição:" + socioEntra.getNome()));
         socio.setEstahAtivo(true);
         if (!socio.getDependentes().isEmpty()) {
             List<Dependente> dList = new ArrayList<>();
@@ -69,6 +78,14 @@ public class SocioService {
             }
         }
 
+        List<Dependente> dependentes = dependenteRepository.findAll();
+        for (Dependente dependente : dependentes) {
+            if (socio.getNome().equals(dependente.getNome())) {
+                dependente.setEstahAtivo(true);
+                socioRepository.save(socio);
+                break;
+            }
+        }
         return socioRepository.save(socio);
     }
 
@@ -77,13 +94,20 @@ public class SocioService {
                 .orElseThrow(() -> new RelationTypeNotFoundException(
                         "Sócio não existe com número de inscrição:" + socioEntra.getNumInscricao()));
         socio.setEstahAtivo(false);
-        if (!socio.getDependentes().isEmpty()) {
-            List<Dependente> dList = new ArrayList<>();
-            for (Dependente element : socio.getDependentes()) {
-                element.setEstahAtivo(false);
-                dList.add(element);
+        if (socio.getDependentes() != null && !socio.getDependentes().isEmpty()) {
+            for (Dependente dependente : socio.getDependentes()) {
+                dependente.setEstahAtivo(false);
+                dependenteRepository.save(dependente);
             }
-            socio.setDependentes(dList);
+        }
+
+        List<Dependente> dependentes = dependenteRepository.findAll();
+        for (Dependente dependente : dependentes) {
+            if (socio.getNome().equals(dependente.getNome())) {
+                dependente.setEstahAtivo(false);
+                socioRepository.save(socio);
+                break;
+            }
         }
 
         return socioRepository.save(socio);
@@ -92,7 +116,8 @@ public class SocioService {
     public Socio editSocio(Socio socioEntra) throws RelationTypeNotFoundException {
         Socio socio = socioRepository.findById(socioEntra.getNumInscricao())
                 .orElseThrow(() -> new RelationTypeNotFoundException(
-                        "Sócio não existe com número de inscrição:" + socioEntra.getNumInscricao()));
+                        "Sócio não encontrado com o nome: " + socioEntra.getNumInscricao()));
+
         socio.setNumInscricao(socioEntra.getNumInscricao());
         socio.setNome(socioEntra.getNome());
         socio.setDtNascimento(socioEntra.getDtNascimento());
@@ -102,8 +127,8 @@ public class SocioService {
         socio.setEndereco(socioEntra.getEndereco());
         socio.setTel(socioEntra.getTel());
         socio.setDependentes(socioEntra.getDependentes());
+        return socio;
 
-        return socioRepository.save(socio);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

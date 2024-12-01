@@ -18,7 +18,6 @@ public class Cliente {
     
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)    
-    @Column(unique = true)
     private Long numInscricao;
 
     private String nome;

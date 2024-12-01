@@ -1,17 +1,11 @@
 package com.projetoLocadora.locadora.service;
 
-import java.util.List;
-
 import javax.management.relation.RelationTypeNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.projetoLocadora.locadora.model.Dependente;
-import com.projetoLocadora.locadora.model.Item;
 import com.projetoLocadora.locadora.repository.DependenteRepository;
+import com.projetoLocadora.locadora.repository.SocioRepository;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -21,6 +15,9 @@ public class DependenteService {
 
     @Autowired
     private DependenteRepository dependenteRepository;
+
+    @Autowired
+    private SocioRepository socioRepository;
 
     public Dependente saveDependente(Dependente dependenteEntra) {
         return dependenteRepository.save(dependenteEntra);
@@ -87,10 +84,17 @@ public class DependenteService {
     }
 
     public void deleteDependente(Long id) throws RelationTypeNotFoundException {
-        Dependente pa = dependenteRepository.findById(id)
-                .orElseThrow(
-                        () -> new RelationTypeNotFoundException("Dependente não existe com número de inscrição:" + id));
+        Dependente dependente = dependenteRepository.findById(id)
+                .orElseThrow(() -> new RelationTypeNotFoundException(
+                        "Dependente não existe com número de inscrição: " + id));
 
-        dependenteRepository.delete(pa);
+        boolean isSocio = socioRepository.existsByNome(dependente.getNome());
+        System.out.println("Dependente é sócio? " + isSocio);
+
+        if (isSocio) {
+            throw new IllegalArgumentException("O dependente é um sócio e não pode ser excluído");
+        } else {
+            dependenteRepository.delete(dependente);
+        }
     }
 }
