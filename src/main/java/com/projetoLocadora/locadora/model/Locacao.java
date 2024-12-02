@@ -34,7 +34,6 @@ public class Locacao {
     @JoinColumn(name = "idItem")
     private Item item;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idCliente")
-    private Cliente cliente;
+    @ManyToOne(cascade = CascadeType.ALL) 
+    private Dependente cliente;
 }
