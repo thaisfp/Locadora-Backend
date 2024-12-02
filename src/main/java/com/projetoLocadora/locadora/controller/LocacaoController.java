@@ -3,6 +3,7 @@ package com.projetoLocadora.locadora.controller;
 import java.util.List;
 import java.util.UUID;
 
+import javax.management.relation.RelationNotFoundException;
 import javax.management.relation.RelationTypeNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ import lombok.AllArgsConstructor;
 public class LocacaoController {
 
     @Autowired
-    private final LocacaoService locacaoServ;
+    private final LocacaoService locacaoService;
 
     @PostMapping("/criar")
     @Operation(description = "Dado o item, cadastra uma nova locacao.", responses = {
@@ -39,7 +40,7 @@ public class LocacaoController {
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
     public Locacao salvarLocacao(@RequestBody Locacao grava) {
-        return locacaoServ.saveAll(grava);
+        return locacaoService.saveAll(grava);
 
     }
 
@@ -50,8 +51,23 @@ public class LocacaoController {
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
     public Locacao editarLocacao(@RequestBody Locacao grava) throws RelationTypeNotFoundException {
-        return locacaoServ.editAll(grava);
+        return locacaoService.editAll(grava);
 
+    }
+
+    
+     @GetMapping("/listar")
+    @Operation(description = "Lista todos os socios.", responses = {
+            @ApiResponse(responseCode = "200", description = "Caso os socios sejam listadas com sucesso."),
+            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do cliente."),
+            @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
+    })
+    public ResponseEntity<?> listarSocios() throws RelationNotFoundException {
+        try {
+            return ResponseEntity.ok(locacaoService.listAll());
+        } catch (Exception erro) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: " + erro.getMessage());
+        }
     }
 
     @GetMapping("/listar/pendente")
@@ -61,7 +77,7 @@ public class LocacaoController {
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
     public List<Locacao> listarLocacaoPendente() {
-        return locacaoServ.listAllNaoDevolvido();
+        return locacaoService.listAllNaoDevolvido();
     }
 
     @GetMapping("/listar/devolvida")
@@ -71,7 +87,7 @@ public class LocacaoController {
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
     public List<Locacao> listarLocacaoDevolvida() {
-        return locacaoServ.listAllDevolvido();
+        return locacaoService.listAllDevolvido();
     }
 
     @GetMapping("/listar/{id}")
@@ -81,7 +97,7 @@ public class LocacaoController {
             @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
     })
     public Locacao pegarIdLocacao(@PathVariable UUID id) throws RelationTypeNotFoundException {
-        return locacaoServ.listId(id);
+        return locacaoService.listId(id);
 
     }
 
@@ -93,7 +109,7 @@ public class LocacaoController {
     })
     public ResponseEntity<String> deletarLocacao(@PathVariable UUID id) {
         try {
-            locacaoServ.deleteId(id);
+            locacaoService.deleteId(id);
             return ResponseEntity.ok("Locacao deletado com sucesso");
         } catch (RelationTypeNotFoundException erro) {
 

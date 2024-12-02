@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.projetoLocadora.locadora.model.Dependente;
+import com.projetoLocadora.locadora.model.Item;
 import com.projetoLocadora.locadora.model.Locacao;
 import com.projetoLocadora.locadora.model.Socio;
 import com.projetoLocadora.locadora.repository.LocacaoRepository;
@@ -41,6 +42,10 @@ public class LocacaoService {
 
         return locacaoRepo.save(editado);
 
+    }
+
+    public Iterable<Locacao> listAll(){
+        return locacaoRepo.findAll();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
