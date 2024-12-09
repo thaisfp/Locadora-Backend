@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 @Entity
 public class Locacao {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID idLocacao;
@@ -34,7 +34,8 @@ public class Locacao {
     @JoinColumn(name = "idItem")
     private Item item;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "idCliente")
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
+
 }

@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.projetoLocadora.locadora.model.Dependente;
 import com.projetoLocadora.locadora.repository.DependenteRepository;
+import com.projetoLocadora.locadora.repository.LocacaoRepository;
 import com.projetoLocadora.locadora.repository.SocioRepository;
 
+import exception.DependenteEmLocacaoException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Service
@@ -19,6 +21,9 @@ public class DependenteService {
     @Autowired
     private SocioRepository socioRepository;
 
+    @Autowired
+    private LocacaoRepository locacaoRepository;
+    
     public Dependente saveDependente(Dependente dependenteEntra) {
         return dependenteRepository.save(dependenteEntra);
     }
@@ -97,4 +102,5 @@ public class DependenteService {
             dependenteRepository.delete(dependente);
         }
     }
+
 }

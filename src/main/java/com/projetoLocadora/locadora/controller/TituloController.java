@@ -1,8 +1,10 @@
 package com.projetoLocadora.locadora.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.management.relation.RelationNotFoundException;
+import javax.management.relation.RelationTypeNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -99,5 +101,39 @@ public class TituloController {
         } catch (RelationNotFoundException erro) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro: " + erro.getMessage());
         }
+    }
+
+    @GetMapping("/listar/tituloNome/{nome}")
+    @Operation(description = "Retorna o titulo cadastrado por nome do titulo.", responses = {
+            @ApiResponse(responseCode = "200", description = "Caso o titulo seja listado com sucesso."),
+            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do cliente."),
+            @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
+    })
+    public List<Titulo> listarTituloNome(@PathVariable String nome) throws RelationTypeNotFoundException {
+        return service.listTituloNome(nome);
+
+    }
+
+    @GetMapping("/listar/tituloAtor/{ator}")
+    @Operation(description = "Retorna o titulo cadastrado por nome do ator.", responses = {
+            @ApiResponse(responseCode = "200", description = "Caso o titulo seja listado com sucesso."),
+            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do cliente."),
+            @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
+    })
+    public List<Titulo> listarTituloAtor(@PathVariable String ator) throws RelationTypeNotFoundException {
+        System.out.println("NOME ATOR: "+ ator);
+        return service.listTituloAtor(ator);
+
+    }
+
+    @GetMapping("/listar/tituloCategoria/{categoria}")
+    @Operation(description = "Retorna o titulo cadastrado por categoria.", responses = {
+            @ApiResponse(responseCode = "200", description = "Caso o titulo seja listado com sucesso."),
+            @ApiResponse(responseCode = "400", description = "O servidor não pode processar a requisição devido a alguma coisa que foi entendida como um erro do cliente."),
+            @ApiResponse(responseCode = "500", description = "Caso não tenha sido possível realizar a operação.")
+    })
+    public List<Titulo> listarTitulocategoria(@PathVariable String categoria) throws RelationTypeNotFoundException {
+        return service.listTituloCategoria(categoria);
+
     }
 }
